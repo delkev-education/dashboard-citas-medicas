@@ -7,22 +7,26 @@ df = pd.read_csv("citas_medicas.csv")
 
 st.title("Dashboard de Gestión de Citas Médicas")
 
-# Citas por especialidad
+# -------------------------
+# Citas por Especialidad
+# -------------------------
 st.subheader("Citas por Especialidad")
 
+especialidades = df["especialidad"].value_counts().reset_index()
+especialidades.columns = ["Especialidad", "Cantidad"]
+
 fig1 = px.bar(
-    df["especialidad"].value_counts().reset_index(),
-    x="index",
-    y="especialidad",
-    labels={
-        "index": "Especialidad",
-        "especialidad": "Cantidad"
-    }
+    especialidades,
+    x="Especialidad",
+    y="Cantidad",
+    color="Especialidad"
 )
 
-st.plotly_chart(fig1)
+st.plotly_chart(fig1, use_container_width=True)
 
+# -------------------------
 # Estado de las citas
+# -------------------------
 st.subheader("Estado de las Citas")
 
 fig2 = px.pie(
@@ -30,9 +34,11 @@ fig2 = px.pie(
     names="estado"
 )
 
-st.plotly_chart(fig2)
+st.plotly_chart(fig2, use_container_width=True)
 
+# -------------------------
 # Citas por mes
+# -------------------------
 df["fecha"] = pd.to_datetime(df["fecha"])
 df["mes"] = df["fecha"].dt.month
 
@@ -47,4 +53,4 @@ fig3 = px.line(
     markers=True
 )
 
-st.plotly_chart(fig3)
+st.plotly_chart(fig3, use_container_width=True)
